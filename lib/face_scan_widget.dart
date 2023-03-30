@@ -24,8 +24,8 @@ class _FaceScanWidgetState extends State<FaceScanWidget> {
   bool isCameraInitialize = false;
 
   int stepIndex = 0;
-  double faceHeightOffset = 600;
-  double headZAngleOffset = 1.5;
+  double faceHeightOffset = 100;
+  double headZAngleOffset = 3;
   double headZAngleBase = 0;
   double blinkOffset = 0.15;
   int bottomMouthBase = 0;
@@ -150,7 +150,7 @@ class _FaceScanWidgetState extends State<FaceScanWidget> {
       final rightEyeOpen = faces.first.rightEyeOpenProbability;
       final headEulerAnglez = faces.first.headEulerAngleZ;
 
-      log('face distance : ${boundingBox.height}');
+      log('face distance : ${boundingBox.height} || faceHeightOffset :$faceHeightOffset');
       log('face center : ${boundingBox.center.distance}');
       log('nose position  : x = ${noseBase!.position.x} y = ${noseBase.position.y}');
       log('leftEyeOpen  : $leftEyeOpen');
@@ -182,21 +182,22 @@ class _FaceScanWidgetState extends State<FaceScanWidget> {
             break;
           case 2:
             {
-              log('step Turn head right');
-              if (headEulerAnglez! > (headZAngleBase + headZAngleOffset)) {
-                log("step Turn head right: yes");
+              log('step Turn head left');
+              if (headEulerAnglez! < (headZAngleBase - headZAngleOffset)) {
+                log("step  Turn head left: yes");
                 changeStateDection(3);
               }
             }
             break;
           case 3:
             {
-              log('step Turn head left');
-              if (headEulerAnglez! < (headZAngleBase - headZAngleOffset)) {
-                log("step  Turn head left: yes");
+              log('step Turn head right');
+              if (headEulerAnglez! > (headZAngleBase + headZAngleOffset)) {
+                log("step Turn head right: yes");
                 changeStateDection(4);
               }
             }
+
             break;
           case 4:
             {
@@ -206,6 +207,11 @@ class _FaceScanWidgetState extends State<FaceScanWidget> {
                 log("step Open your mount");
                 changeStateDection(5);
               }
+            }
+            break;
+          case 5:
+            {
+              log('Ok');
             }
             break;
           default:
@@ -250,10 +256,20 @@ class _FaceScanWidgetState extends State<FaceScanWidget> {
                 }),
               ),
             )),
-            SizedBox(
-              height: 50, 
+            const SizedBox(
+              height: 50,
             ),
-            Text(listState[stepIndex])
+            Text(listState[stepIndex]),
+            const SizedBox(
+              height: 50,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    stepIndex = 0;
+                  });
+                },
+                child: Text("click"))
           ],
         );
       });
