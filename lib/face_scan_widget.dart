@@ -141,7 +141,7 @@ class _FaceScanWidgetState extends State<FaceScanWidget> {
     log('found face = ${faces.length}');
 
     if (faces.isNotEmpty) {
-      log("detect landmark");
+      log("detect step : $stepIndex");
 
       final Rect boundingBox = faces.first.boundingBox;
       final noseBase = faces.first.landmarks[FaceLandmarkType.noseBase];
@@ -182,27 +182,28 @@ class _FaceScanWidgetState extends State<FaceScanWidget> {
             break;
           case 2:
             {
-              log('Turn head right');
+              log('step Turn head right');
               if (headEulerAnglez! > (headZAngleBase + headZAngleOffset)) {
-                log("Turn head right: yes");
+                log("step Turn head right: yes");
                 changeStateDection(3);
               }
             }
             break;
           case 3:
             {
-              log('Turn head left');
+              log('step Turn head left');
               if (headEulerAnglez! < (headZAngleBase - headZAngleOffset)) {
-                log("Turn head left: yes");
+                log("step  Turn head left: yes");
                 changeStateDection(4);
               }
             }
             break;
           case 4:
             {
-              log('Open your mount');
-              if (bottomMouth.position.y > (bottomMouthBase + bottomMouthOffset)) {
-                log("Open your mount");
+              log('step Open your mount');
+              if (bottomMouth.position.y >
+                  (bottomMouthBase + bottomMouthOffset)) {
+                log("step Open your mount");
                 changeStateDection(5);
               }
             }
@@ -249,6 +250,9 @@ class _FaceScanWidgetState extends State<FaceScanWidget> {
                 }),
               ),
             )),
+            SizedBox(
+              height: 50, 
+            ),
             Text(listState[stepIndex])
           ],
         );
